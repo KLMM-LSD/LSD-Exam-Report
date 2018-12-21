@@ -68,34 +68,38 @@ Da vi fik projektet diskuterede vi og undersøgte hvordan dette projekt kunne im
 
 #### Frontend
 Vores frontend blev bygget med JS, HTML og CSS og benytter sig ikke af nogle frameworks og virker på en iPhone 4, som ikke kan ES6. Man kunne også have brugt NodeJS til at servicere frontend men så ville det kræve at tillade Cross-origin resource sharing da det ikke kan dele port med java serveren. Det ville også være ekstra ueffektivt at have to garbage collectede sprog kørende samtidigt på samme maskine. Herunder ses hvordan designet ser ud og hvordan vores frontend fungerer.
-- Billede
-- Billede
+![Front1](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Front1.png)
+![Front2](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Front2.png)
 
 Ved at trykke på en post som en bruger har lavet, kan siden hoppe videre til den tråd som posten står i, og hoppe direkte hen til den post hvor end den der.
-- Billede
+![Front3](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Front3.png)
 
 Her ses en tråd der er loadet. Det meste af tiden der går på at loade en side er konvertering fra Database → JSON og på client side JSON → HTML. Bid mærke i at HTML tags i posts escapes, så folk ikke kan lave alt for sjove ting på siden.
-- Billede
+![Front4](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Front4.png)
 
 #### Backend
 Vores backend blev lavet i Java via JavaX.WS.RS og kører på en WildFly server. Der var lidt spekulering i starten om vi ville prøve at lave vores webservice med Spring-boot frameworket, men besluttede ikke at gøre det alligevel da ingen af os havde erfaringer med det. Vi tænkte at performance af databaseforbindelserne var vigtigt og fandt noget der hedder HikariCP som er en connection pool. Ifølge deres egen hjemmeside er de den hurtigeste connection pool til Java. Den var nem at bruge og at sætte op. For at oprette en forbindelse skulle der kun laves noget konfiguration i forbindelsesklassen og indsættes et dependency i POM filen. Siden projektet også var et webprojekt blev der også lavet REST-API’er, da det bestod af flere komponenter, som backend og frontend, der skulle snakke sammen.
 
 #### Database
 Al data persisteres i en MySQL database. Databasestrukturen er lavet til at være så direkte kompatibel med Helges simulatordata som muligt. Tabellen ratings blev ikke aktuel.
-- Billede
-- Billede
-- Billede
-- Billede
-- Billede
+![DB-billede1](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede1.png)
+![DB-billede2](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede2.png)
+![DB-billede3](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede3.png)
+![DB-billede4](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede4.png)
+![DB-billede5](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede5.png)
 
 Helges simulatordata er så upraktisk lavet at der ikke gemmes et trådid i hver post. Der står kun hvilken post en post er et svar til. Hvis man vil bruge den databasestruktur skal man lave rekursive databaseopslag for at læse en hel tråd. Vi troede at det skulle være realistisk så man havde en service man ville bruge. I sådan et tilfælde er det langsomt at lave rekursive databaseopslag, så vi tilføjede et ekstra trådid-felt som nedarves ved indsættelse af data. Ved indsættelse af en ny tråd er dette felt lig postid, og ellers nedarver man fra parent. Vores gruppe er en af de få grupper der har implementeret at man rent faktisk kan lave opslag på tråde. Desuden er vores frontend til at læse tråde langt mere genialt end det der er på HackerNews. På HackerNews vises kommentarer som træer. Det betyder at når der kommer nye posts er det utroligt besværligt at finde ud af hvilke posts der er nye, for de nye posts kan være hvor som helst på skærmen. I vores design er posts altid sorteret efter postid, og de vises ikke som træer. I stedet er der backlinks til det en post er et svar til.
 
 **Insert-performance**
 Vi brugte Helges student_tester.py til at benchmarke servicen. Benchmarket blev kørt på Lasses bærbar. Helge havde sat timeouten som default til 0.1 sek og påstod at tiden i timeout ikke ville påvirke hvor hurtigt sriptet kører, men det er usandt. Ved at køre scriptet med forskellige timeouts tog det hhv kortere eller længere tid at køre scriptet - selv om alle requests blev indsat. Det viste sig at være ret langsomt at indsætte posts en ad gangen. Det kunne tage op mod 0,4 sek at indsætte en enkel post. Det meste af tiden går dog bare på at oprette en forbindelse til MySQL og at skrive data ned på disken. En harddisk skal seeke et sted hen for så at kunne skrive sekventielt. Det er hurtigt at læse eller skrive sekventielt, men at seeke er meget langsomt. Vi prøvede en anden arkitektur med samme benchmark som viste sig at køre langt hurtigere. Posts bliver taget imod med det samme, og indsat i en linked list. En baggrundstråd tager hvad end der er i listen hvert sekund og indsætter det i databasen - flere elementer ad gangen. Som det fremgår af resultaterne nedenunder, så var det en markant forbedring. Helge viste på et tidspunkt en graf over hvor mange posts der ville komme, som havde spikes op til omkring 1000. Vi kunne ikke huske hvad tidsenheden skulle være, og frygtede at det ville være i sekunder. Forestil jer vores overraskelse da det viste sig at være i minuttet, ikke i sekundet, når vi havde lavet noget med tanken om 1000/sek.
-- Billede
+![DB-billede6](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede6.png)
 
 ### 1.5. Software implementation
-TBD
+#### Database
+En af de mest essentielle komponenter af systemet var databasen, da det er databasen der skal holde den store mængde data vi skulle arbejde med. Vi valgte at anvende en MySQL database, da der var behov for relationer og en effektiv indexering. Her oprettede vi de nødvendige tabeller, samt deres constraints. Midt i forløbet fik vi specificeret mere præcist, hvilket form dataen skulle have, da Helge gav os specifikationer for det API hans simulering skulle tilgå.
+
+#### Backend
+Vores backend blev udviklet ud fra MVC mønstret. Det vil altså sige, at vi oprettede et lag for tilgang til database. Et kontrol lag, som havde at gøre med logikken af koden. Vores løsning blev gradvist ændret i takt med, at mere information blev tilgængeligt, f.eks. hvordan dataen skulle se ud ifølge Helges simulering. Originalt delte vi dataen i henholdsvis Users, Comments & Posts, og forventede, at en posts og kommentarer havde hver deres API entry point til oprettelse. Det viste sig, at både kommentarer og posts kom fra samme endpoint, derfor skelnede mellem dem ud fra deres “post_type”, som et felt i den JSON data vi modtog.
 
 ## 2. Maintenance og SLA status
 Vi vil i dette afsnit komme ind på hvordan vores Hand-over foregik, hvordan vores SLA blev håndteret og hvordan vi vedligeholdte den gruppes projekt vi skulle operere for.
@@ -106,11 +110,11 @@ Hand-over i starten gik først ud på at få noget kommunikation med den gruppe 
 ### 2.2. Service-level agreement
 Vi troede i starten at man skulle lave en service level agreement til sig selv. Vi fandt på en om at forsiden skulle give svar hurtigere end 100msek, målt fra en en frankfurt droplet til vores deployment. Bagefter fandt vi ud af at det ikke var meningen at man skulle finde på en til sig selv, og at gruppe A skulle give os en. Deres SLA til os gik hovedsageligt ud på at vores forside skulle svare hurtigere end 2-3 sek.
 Helge lavede også senere en loadsimulator til forsiden og loggede svartiderne i en graf. Det er os nederst på grafen med de hurtigeste svartider, omtrænt 3msek.
-- Billede
+![Stor-Graf](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Stor%20graf.png)
 
 Til monitoring blev der også lavet et python script som viser brugen af diskplads af databasen, såvel som processorbrug i procent.
-- Billede
-- Billede
+![Megabutes](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Megabytes.png)
+![CPU-Usage](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/CPU-usage.png)
 
 ### 2.3. Maintenance og reliability
 For at gøre det nemmere at holde øje med systemets funktion, og ud fra den undervisning vi har fået, valgte vi at implementere et Monitoring-system. System Monitoring kan sådan set implementeres ved at lægge relevante system-events og metrikker i logfiler, og så manuelt kigge dem igennem med jævne mellemrum. Denne metode er dog problematisk, da den kræver at den menneskelige operatør både husker at checke logfiler, og ikke overser vigtige detaljer. Den giver også et meget begrænset overblik i sig selv, så operatøren skal kende systemet ind og ud for at kunne danne sig et billede af dets funktionsdygtighed.
@@ -120,7 +124,7 @@ For at Prometheus skal være i stand til at monitorere en webapplikation, skal a
 Prometheus understøtter også andre features, bl.a. notifikation via email når en værdi ligger uden for et ønsket område. Vi har dog valgt at lade vores Dashboard løsning tage sig af dette, da den er mere brugervenlig.
 
 Prometheus har indbyggede visualiseringsfunktioner der fungerer, men de er klart rettet mod udviklere og ikke slutbrugere. En af de mest brugte løsninger til at skabe brugervenlige dashboards med monitoreringsvisualiseringer hedder Grafana. Den har indbygget brugerstyring og email alerts, udover en meget kraftig udtræks- og visualiseringsmotor, og dette gør det meget nemt at for os at vedligeholde et Dashboard der skal bruges af slutbrugeren, uden at give dem for meget adgang. Vores dashboard kan ses her:
-- Billede
+![Grafana-eksempel](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Grafana-eksempel.png)
 
 For at understøtte operatør-gruppen i at holde øje med om systemet lever op til vores Service Level Agreement, har vi valgt fem metrics der er relevante: 
 - PostID for den seneste post vi har modtaget
