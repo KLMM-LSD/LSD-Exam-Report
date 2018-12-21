@@ -9,11 +9,11 @@
 **Afleveret:** 21/12/2018
 
 ## Introduktion
-Larges System Development kurset har haft fokus på hvordan man etablerer et udviklings- og produktionsmiljø med Continuous Integration og Continuous Delivery.<br />
+Large Systems Development kurset har haft fokus på hvordan man etablerer et udviklings- og produktionsmiljø med Continuous Integration og Continuous Delivery.<br />
 Formålet var at implementere en kopi af Hackernews hjemmesiden: https://news.ycombinator.com/
  
 Forløbet bestod af to perioder, hvor første periode var udvikling af vores projekt og anden periode bestod af at observere en anden gruppes projekt.<br />
-Redskaberne brugt i udviklings perioden var meget selvvalgt og ud fra hvad vi syntes var nemmest, hvor i perioden vi skulle observere den anden gruppes projekt, blev vi introduceret til forskellige 3rd-party redskaber der skulle tages i brug for bedre observering og rapportering af problemer. Alt forklaret mere uddybende i denne rapport.
+Redskaberne, vi brugte i udviklings perioden var meget selvvalgt og ud fra hvad vi syntes var nemmest, mens vi i perioden hvor vi skulle observere den anden gruppes projekt, blev introduceret til forskellige 3rd-party redskaber der skulle tages i brug for bedre observering og rapportering af problemer. Alt forklaret mere uddybende i denne rapport.
 
 ## 1. Krav, arkitektur, design og process
 Vi kommer i dette afsnit ind på vores Krav, arkitektur af hele vores system, design af de forskellige komponenter og den process vi har brugt for at lave dette projekt.
@@ -63,10 +63,10 @@ Her ses en overordnet arkitektur af systemet og håndtering af data:
 
 ![Arkitektur3](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Arkitektur3.png)
 
-Der er fire war filer til de forskellige funktionaliteter. Status svarer enten “Alive”, “Update”, “Down”. Frontend er HTML, CSS og JS. Base tager imod data og Latest giver data i form af JSON.
+Der er fire .war filer til de forskellige funktionaliteter. Status svarer enten “Alive”, “Update”, “Down”. Frontend er HTML, CSS og JS. Base tager imod data og Latest giver data i form af JSON.
 
 ### 1.4. Software design
-Da vi fik projektet diskuterede vi og undersøgte hvordan dette projekt kunne implementeres samt hvilke redskaber der skulle bruges. Så vidt vi vidste skulle man bruge java, men det var åbenbart ikke tilfældet. Vi blev tildelt et dokument om hvilke software kravspecifikationer der skulle laves på både i de non-funktionelle og funktionelle krav. Der blev også set på hvordan Hackernews hjemmesiden så ud og hvordan det officielle API så ud inden vi begyndte at designe vores projekt. Efter at have gennemskuet hvordan vi ville lave det ud fra den information vi nu kunne finde og blev tildelt, kunne vi så designe vores Frontend, Backend og Database.
+Da vi fik projektet diskuterede vi og undersøgte hvordan dette projekt kunne implementeres, samt hvilke redskaber der skulle bruges. Så vidt vi vidste skulle man bruge java, men det var åbenbart ikke tilfældet. Vi blev tildelt et dokument om hvilke software kravspecifikationer der skulle laves på både i de non-funktionelle og funktionelle krav. Der blev også set på hvordan Hackernews hjemmesiden så ud og hvordan det officielle API så ud inden vi begyndte at designe vores projekt. Efter at have gennemskuet hvordan vi ville lave det ud fra den information vi nu kunne finde og blev tildelt, kunne vi så designe vores Frontend, Backend og Database.
 
 #### Frontend
 Vores frontend blev bygget med JS, HTML og CSS og benytter sig ikke af nogle frameworks og virker på en iPhone 4, som ikke kan ES6. Man kunne også have brugt NodeJS til at servicere frontend men så ville det kræve at tillade Cross-origin resource sharing da det ikke kan dele port med java serveren. Det ville også være ekstra ueffektivt at have to garbage collectede sprog kørende samtidigt på samme maskine. Herunder ses hvordan designet ser ud og hvordan vores frontend fungerer.
@@ -83,7 +83,7 @@ Her ses en tråd der er loadet. Det meste af tiden der går på at loade en side
 ![Front4](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Front4.png)
 
 #### Backend
-Vores backend blev lavet i Java via JavaX.WS.RS og kører på en WildFly server. Der var lidt spekulering i starten om vi ville prøve at lave vores webservice med Spring-boot frameworket, men besluttede ikke at gøre det alligevel da ingen af os havde erfaringer med det. Vi tænkte at performance af databaseforbindelserne var vigtigt og fandt noget der hedder HikariCP som er en connection pool. Ifølge deres egen hjemmeside er de den hurtigeste connection pool til Java. Den var nem at bruge og at sætte op. For at oprette en forbindelse skulle der kun laves noget konfiguration i forbindelsesklassen og indsættes et dependency i POM filen. Siden projektet også var et webprojekt blev der også lavet REST-API’er, da det bestod af flere komponenter, som backend og frontend, der skulle snakke sammen.
+Vores backend blev lavet i Java via JavaX.WS.RS og kører på en WildFly server. Der var lidt spekulering i starten om vi ville prøve at lave vores webservice med Spring-boot frameworket, men besluttede os for ikke at gøre det alligevel, da ingen af os havde erfaringer med det. Vi tænkte at performance af databaseforbindelserne var vigtigt og fandt noget der hedder HikariCP som er en connection pool. Ifølge deres egen hjemmeside er de den hurtigeste connection pool til Java. Den var nem at bruge og at sætte op. For at oprette en forbindelse skulle der kun laves noget konfiguration i forbindelsesklassen og indsættes et dependency i POM filen. Siden projektet også var et webprojekt blev der også lavet REST-API’er, da det bestod af flere komponenter, som backend og frontend, der skulle snakke sammen.
 
 #### Database
 Al data persisteres i en MySQL database. Databasestrukturen er lavet til at være så direkte kompatibel med Helges simulatordata som muligt. Tabellen ratings blev ikke aktuel.
@@ -127,6 +127,11 @@ Til monitoring blev der også lavet et python script som viser brugen af diskpla
 ![CPU-Usage](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/CPU-usage.png)
 
 ### 2.3. Maintenance og reliability
+Når vi skiftede fra Udviklingsfasen og til driftsfasen var opsætning af et monitoreringssystem en prioritet, for at gøre livet nemmere for den gruppe der skulle drive vores projekt.
+Vi blev også bedt om at få vores system til at give fejl, for sådan at teste driftsgruppens monitorerings- og driftsprocesser, samt om at finde sikkerhedshuller i det system vi selv skulle drive.
+Ud over det var meget få ændringer nødvendige i denne fase, da vores system fungerede rimelig godt under belastning.
+
+#### 2.3.1 Monitorering
 For at gøre det nemmere at holde øje med systemets funktion, og ud fra den undervisning vi har fået, valgte vi at implementere et Monitoring-system. System Monitoring kan sådan set implementeres ved at lægge relevante system-events og metrikker i logfiler, og så manuelt kigge dem igennem med jævne mellemrum. Denne metode er dog problematisk, da den kræver at den menneskelige operatør både husker at checke logfiler, og ikke overser vigtige detaljer. Den giver også et meget begrænset overblik i sig selv, så operatøren skal kende systemet ind og ud for at kunne danne sig et billede af dets funktionsdygtighed.
 
 Derfor er det oplagt at lade computere tage sig af den overordnede databehandling, og gemme relevante metrikker i en Time Series Database, hvorfra de kan undersøges vha. et Query-sprog. Til dette formål har vi valgt Prometheus, der kombinerer et web-scraping baseret Monitoring system, med en indbygget Time Series database, hvor alle valgte værdier bliver gemt og indekseret på tid.
