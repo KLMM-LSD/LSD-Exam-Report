@@ -126,6 +126,7 @@ For at understøtte operatør-gruppen i at holde øje med om systemet lever op t
 - Hvorvidt Frontend, Status og Prometheus er ‘oppe’
 - Hvor mange Post-forespørgsler vi har modtaget
 - Hvor mange HTTP-fejl 500 vi har returneret
+
 Ud fra disse metrics er det muligt at få et rimeligt overblik af systemets sundhed, og en periode der bryder med kravene fra vores SLA vil give klare udslag på graferne.<br />
 Grafana har også indbygget funktionalitet til at snakke med email-servere via SMTP, så ved at sende Alerts over en af vores gmail-kontoer, var vi i stand til at opsætte automatiske e-mailnotifikationer når f.eks. forside-latensen overstiger 2-3 sekunder.<br />
 Dette Monitoring-system viste sig at være et meget godt værktøj, selv om vi ikke strengt taget fik specielt meget brug for det ift. systemfejl og SLA-brud. Selv når alt kører som det skal, kan det være svært at sikre sig selv om det, og det i sig selv kan meget hurtigt blive til en tidskrævende manuel arbejdsproces, hvis ikke man har opsat de rigtige værktøjer og metoder til at begynde med.
