@@ -1,4 +1,4 @@
-# LSD Exam Report
+# LSD Eksamens Rapport
 
 ## Udviklere
 > - Kristjan Reinert Gásadal
