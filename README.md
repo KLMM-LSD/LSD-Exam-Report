@@ -11,7 +11,26 @@ Vi har i vores LSD forløb skulle lave en klon af Hackernews hjemmesiden. Forlø
 Redskaberne brugt i udviklings perioden var meget selvvalgt og ud fra hvad vi syntes var nemmest, hvor i perioden vi skulle vedligeholde den anden gruppes projekt, blev vi introduseret til forskellige 3rd-party redskaber der skulle tages i brug for bedre vedligeholdelse. Alt forklaret mere uddybende i denne rapport.
 
 ## 1. Krav, arkitektur, design og process
+
+Systemet havde følgende minimums krav til funktionalitet:
+
+1. Display a set of stories on your system's front page.
+2. Display a set of comments on stories.
+3. Stories or comments are posted by users, which have to be registered to and logged into the system to be able to post.
+4. Users login to the system via a separate page.
+5. Users are identified by a user name and a password.
+6. New users can register to the system, via a separate page.
+7. The complete HTTP API, as defined below.
+
+- Accept posted stories/comments/etc.
+- Provide the id of the latest digested post.
+- Provide status information.
+
+
+
 ### 1.1. System krav
+
+
 ### 1.2. Udviklings process
 ### 1.3. Software arkitektur
 ### 1.4. Software design
