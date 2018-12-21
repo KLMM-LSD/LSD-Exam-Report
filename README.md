@@ -127,8 +127,8 @@ Til monitoring blev der også lavet et python script som viser brugen af diskpla
 ![CPU-Usage](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/CPU-usage.png)
 
 ### 2.3. Maintenance og reliability
-Når vi skiftede fra Udviklingsfasen og til driftsfasen var opsætning af et monitoreringssystem en prioritet, for at gøre livet nemmere for den gruppe der skulle drive vores projekt.
-Vi blev også bedt om at få vores system til at give fejl, for sådan at teste driftsgruppens monitorerings- og driftsprocesser, samt om at finde sikkerhedshuller i det system vi selv skulle drive.
+Når vi skiftede fra Udviklingsfasen og til driftsfasen var opsætning af et monitoreringssystem en prioritet, for at gøre livet nemmere for den gruppe der skulle drive vores projekt.<br />
+Vi blev også bedt om at få vores system til at give fejl, for sådan at teste driftsgruppens monitorerings- og driftsprocesser, samt om at finde sikkerhedshuller i det system vi selv skulle drive.<br />
 Ud over det var meget få ændringer nødvendige i denne fase, da vores system fungerede rimelig godt under belastning.
 
 #### Monitoring
