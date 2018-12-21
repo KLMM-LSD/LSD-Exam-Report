@@ -6,7 +6,7 @@
 > - Martin Lukas Hansen
 > - Michael Boje Veilis
 
-**Afleveret:** __21/12/2018__
+**Afleveret:** _21/12/2018_
 
 ## Introduktion
 Vi har i vores LSD forløb skulle lave en klon af Hackernews hjemmesiden. Forløbet bestod af to perioder, hvor første periode var udvikling af vores projekt og anden periode bestod af at vedligeholde en anden gruppes projekt.
