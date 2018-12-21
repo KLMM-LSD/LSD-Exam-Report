@@ -53,12 +53,14 @@ Ud over projekt management anvendte vi også Github som versionsstyring, hvor vi
 Softwarearkitekturen i vores projekt består overordnet af en spartansk frontend, udviklet med ren Javascript, HTML og CSS, en backend lavet med Java, JDBC og JavaX.WS.RS samt en Database lavet med MySQL.
 
 Som Cloud-udbyder valgte vi at bruge DigitalOcean. Vi overvejede ikke at bruge en anden cloud service. Vi bestilte en droplet, som kørte hele projektet. Der blev også lavet en droplet til vores overvågningssystemer, Prometheus og Grafana, hvis funktion var at overvåge vores system for mulige fejl. Setuppet endte med at se sådan her ud:
+
 ![Arkitektur1](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Arkitektur1.png)
 ![Arkitektur2](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Arkitektur2.png)
 
 Den ene droplet kørte vores Frontend, Backend og Database, hvor den anden droplet kørte vores Prometheus og Grafana server.
 
 Her ses en overordnet arkitektur af systemet og håndtering af data:
+
 ![Arkitektur3](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Arkitektur3.png)
 
 Der er fire war filer til de forskellige funktionaliteter. Status svarer enten “Alive”, “Update”, “Down”. Frontend er HTML, CSS og JS. Base tager imod data og Latest giver data i form af JSON.
@@ -68,13 +70,16 @@ Da vi fik projektet diskuterede vi og undersøgte hvordan dette projekt kunne im
 
 #### Frontend
 Vores frontend blev bygget med JS, HTML og CSS og benytter sig ikke af nogle frameworks og virker på en iPhone 4, som ikke kan ES6. Man kunne også have brugt NodeJS til at servicere frontend men så ville det kræve at tillade Cross-origin resource sharing da det ikke kan dele port med java serveren. Det ville også være ekstra ueffektivt at have to garbage collectede sprog kørende samtidigt på samme maskine. Herunder ses hvordan designet ser ud og hvordan vores frontend fungerer.
+
 ![Front1](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Front1.png)
 ![Front2](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Front2.png)
 
 Ved at trykke på en post som en bruger har lavet, kan siden hoppe videre til den tråd som posten står i, og hoppe direkte hen til den post hvor end den der.
+
 ![Front3](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Front3.png)
 
 Her ses en tråd der er loadet. Det meste af tiden der går på at loade en side er konvertering fra Database → JSON og på client side JSON → HTML. Bid mærke i at HTML tags i posts escapes, så folk ikke kan lave alt for sjove ting på siden.
+
 ![Front4](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Front4.png)
 
 #### Backend
@@ -82,6 +87,7 @@ Vores backend blev lavet i Java via JavaX.WS.RS og kører på en WildFly server.
 
 #### Database
 Al data persisteres i en MySQL database. Databasestrukturen er lavet til at være så direkte kompatibel med Helges simulatordata som muligt. Tabellen ratings blev ikke aktuel.
+
 ![DB-billede1](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede1.png)
 ![DB-billede2](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede2.png)
 ![DB-billede3](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede3.png)
@@ -92,6 +98,7 @@ Helges simulatordata er så upraktisk lavet at der ikke gemmes et trådid i hver
 
 **Insert-performance**
 Vi brugte Helges student_tester.py til at benchmarke servicen. Benchmarket blev kørt på Lasses bærbar. Helge havde sat timeouten som default til 0.1 sek og påstod at tiden i timeout ikke ville påvirke hvor hurtigt sriptet kører, men det er usandt. Ved at køre scriptet med forskellige timeouts tog det hhv kortere eller længere tid at køre scriptet - selv om alle requests blev indsat. Det viste sig at være ret langsomt at indsætte posts en ad gangen. Det kunne tage op mod 0,4 sek at indsætte en enkel post. Det meste af tiden går dog bare på at oprette en forbindelse til MySQL og at skrive data ned på disken. En harddisk skal seeke et sted hen for så at kunne skrive sekventielt. Det er hurtigt at læse eller skrive sekventielt, men at seeke er meget langsomt. Vi prøvede en anden arkitektur med samme benchmark som viste sig at køre langt hurtigere. Posts bliver taget imod med det samme, og indsat i en linked list. En baggrundstråd tager hvad end der er i listen hvert sekund og indsætter det i databasen - flere elementer ad gangen. Som det fremgår af resultaterne nedenunder, så var det en markant forbedring. Helge viste på et tidspunkt en graf over hvor mange posts der ville komme, som havde spikes op til omkring 1000. Vi kunne ikke huske hvad tidsenheden skulle være, og frygtede at det ville være i sekunder. Forestil jer vores overraskelse da det viste sig at være i minuttet, ikke i sekundet, når vi havde lavet noget med tanken om 1000/sek.
+
 ![DB-billede6](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede6.png)
 
 ### 1.5. Software implementation
@@ -110,9 +117,11 @@ Hand-over i starten gik først ud på at få noget kommunikation med den gruppe 
 ### 2.2. Service-level agreement
 Vi troede i starten at man skulle lave en service level agreement til sig selv. Vi fandt på en om at forsiden skulle give svar hurtigere end 100msek, målt fra en en frankfurt droplet til vores deployment. Bagefter fandt vi ud af at det ikke var meningen at man skulle finde på en til sig selv, og at gruppe A skulle give os en. Deres SLA til os gik hovedsageligt ud på at vores forside skulle svare hurtigere end 2-3 sek.
 Helge lavede også senere en loadsimulator til forsiden og loggede svartiderne i en graf. Det er os nederst på grafen med de hurtigeste svartider, omtrænt 3msek.
+
 ![Stor-Graf](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Stor%20graf.png)
 
 Til monitoring blev der også lavet et python script som viser brugen af diskplads af databasen, såvel som processorbrug i procent.
+
 ![Megabutes](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Megabytes.png)
 ![CPU-Usage](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/CPU-usage.png)
 
@@ -124,6 +133,7 @@ For at Prometheus skal være i stand til at monitorere en webapplikation, skal a
 Prometheus understøtter også andre features, bl.a. notifikation via email når en værdi ligger uden for et ønsket område. Vi har dog valgt at lade vores Dashboard løsning tage sig af dette, da den er mere brugervenlig.
 
 Prometheus har indbyggede visualiseringsfunktioner der fungerer, men de er klart rettet mod udviklere og ikke slutbrugere. En af de mest brugte løsninger til at skabe brugervenlige dashboards med monitoreringsvisualiseringer hedder Grafana. Den har indbygget brugerstyring og email alerts, udover en meget kraftig udtræks- og visualiseringsmotor, og dette gør det meget nemt at for os at vedligeholde et Dashboard der skal bruges af slutbrugeren, uden at give dem for meget adgang. Vores dashboard kan ses her:
+
 ![Grafana-eksempel](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Grafana-eksempel.png)
 
 For at understøtte operatør-gruppen i at holde øje med om systemet lever op til vores Service Level Agreement, har vi valgt fem metrics der er relevante: 
