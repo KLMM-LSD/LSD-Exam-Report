@@ -42,7 +42,7 @@ Der var krav om at udviklingen skulle ske via scrum.
 Rollerne fra Scrum, som product owner, Scrum master, technical lead osv., lå forholdsvis løst, hvor ansvaret for de forskellige områder var fælles. Sprints bestod af én uges udviklingsforløb, efterfulgt af et retrospektiv samt et technical review med underviseren (Helge). Forløbet var delvist styret af det faktum, at der var løbende afleveringer, hvor der var en feature eller et dokument, som skulle være færdig inden for en vis tidsperiode.  
 
 Til et scrum forløb hører der selvfølgelig en product- og sprint backlog. Vores backlog kan findes her og vores individuelle kanban board kan findes her. Vores backlog består af en opdeling af user stories i deres respektive sprint periode. Herunder ses den generelle struktur: 
-- Billede
+![Scrumboard](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Scrumboard.png)
 
 Det gav i øvrigt mening at udnytte en række af principperne fra XP - der fint komplimenterer Scrum. Dette inkluderer, men begrænser sig ikke til, Pair Programming til de mere udfordrende opgaver. Simpelt design var i fokus, da koden helst skal være overskuelig, selv hvis det set udefra. Testing er vigtigt mht. at garantere en vis kvalitet. Kontinuerlig integration(Travis CI) anvendte vi til at sikre os, at der ikke blev pushet en masse kode op, som skabte en masse uforventede fejl. Koden blev refaktoreret efter behov og vi blev i starten af forløbet enige om en fælles kodningsstandard.
 
@@ -52,12 +52,13 @@ Ud over projekt management anvendte vi også Github som versionsstyring, hvor vi
 Softwarearkitekturen i vores projekt består overordnet af en spartansk frontend, udviklet med ren Javascript, HTML og CSS, en backend lavet med Java, JDBC og JavaX.WS.RS samt en Database lavet med MySQL.
 
 Som Cloud-udbyder valgte vi at bruge DigitalOcean. Vi overvejede ikke at bruge en anden cloud service. Vi bestilte en droplet, som kørte hele projektet. Der blev også lavet en droplet til vores overvågningssystemer, Prometheus og Grafana, hvis funktion var at overvåge vores system for mulige fejl. Setuppet endte med at se sådan her ud:
-- billede
+![Arkitektur1](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Arkitektur1.png)
+![Arkitektur2](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Arkitektur2.png)
 
 Den ene droplet kørte vores Frontend, Backend og Database, hvor den anden droplet kørte vores Prometheus og Grafana server.
 
 Her ses en overordnet arkitektur af systemet og håndtering af data:
-- Billede
+![Arkitektur3](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Arkitektur3.png)
 
 Der er fire war filer til de forskellige funktionaliteter. Status svarer enten “Alive”, “Update”, “Down”. Frontend er HTML, CSS og JS. Base tager imod data og Latest giver data i form af JSON.
 
