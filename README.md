@@ -32,6 +32,14 @@ Systemet havde følgende minimums krav til funktionalitet:
 
 
 ### 1.2. Udviklings process
+
+  Udviklingen tog udgangspunkt i den agile udviklingsmetode Scrum. Funktionaliteten blev opdelt i user stories som eksempelvis: 
+  
+  `` (U-01) As a User I want to be able to register so that I can post new discussions aswell as comments ``
+  
+Vi pådrog selv rollerne som Product Owner(PO) og Scrummaster. Sprints bestod af én uges udviklingsforløb, efterfulgt af et retrospektiv
+samt et technical review med underviseren (Helge). Forløbet var delvist styret af det faktum, at der var løbende afleveringen, hvor vi eksempelvis skulle have noget "service level agreement" i slutningen af sprintet og lignende.  
+
 ### 1.3. Software arkitektur
 ### 1.4. Software design
 ### 1.5. Software implementation
