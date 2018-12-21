@@ -41,7 +41,8 @@ Der var krav om at udviklingen skulle ske via scrum.
 
 Rollerne fra Scrum, som product owner, Scrum master, technical lead osv., lå forholdsvis løst, hvor ansvaret for de forskellige områder var fælles. Sprints bestod af én uges udviklingsforløb, efterfulgt af et retrospektiv samt et technical review med underviseren (Helge). Forløbet var delvist styret af det faktum, at der var løbende afleveringer, hvor der var en feature eller et dokument, som skulle være færdig inden for en vis tidsperiode.  
 
-Til et scrum forløb hører der selvfølgelig en product- og sprint backlog. Vores backlog kan findes her og vores individuelle kanban board kan findes her. Vores backlog består af en opdeling af user stories i deres respektive sprint periode. Herunder ses den generelle struktur: 
+Til et scrum forløb hører der selvfølgelig en product- og sprint backlog. Vores backlog kan findes her og vores individuelle kanban board kan findes her. Vores backlog består af en opdeling af user stories i deres respektive sprint periode. Herunder ses den generelle struktur:
+
 ![Scrumboard](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/Scrumboard.png)
 
 Det gav i øvrigt mening at udnytte en række af principperne fra XP - der fint komplimenterer Scrum. Dette inkluderer, men begrænser sig ikke til, Pair Programming til de mere udfordrende opgaver. Simpelt design var i fokus, da koden helst skal være overskuelig, selv hvis det set udefra. Testing er vigtigt mht. at garantere en vis kvalitet. Kontinuerlig integration(Travis CI) anvendte vi til at sikre os, at der ikke blev pushet en masse kode op, som skabte en masse uforventede fejl. Koden blev refaktoreret efter behov og vi blev i starten af forløbet enige om en fælles kodningsstandard.
