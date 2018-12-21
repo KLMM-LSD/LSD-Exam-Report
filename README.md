@@ -105,6 +105,7 @@ Hand-over i starten gik først ud på at få noget kommunikation med den gruppe 
 Vi troede i starten at man skulle lave en service level agreement til sig selv. Vi fandt på en om at forsiden skulle give svar hurtigere end 100msek, målt fra en en frankfurt droplet til vores deployment. Bagefter fandt vi ud af at det ikke var meningen at man skulle finde på en til sig selv, og at gruppe A skulle give os en. Deres SLA til os gik hovedsageligt ud på at vores forside skulle svare hurtigere end 2-3 sek.
 Helge lavede også senere en loadsimulator til forsiden og loggede svartiderne i en graf. Det er os nederst på grafen med de hurtigeste svartider, omtrænt 3msek.
 - Billede
+
 Til monitoring blev der også lavet et python script som viser brugen af diskplads af databasen, såvel som processorbrug i procent.
 - Billede
 - Billede
