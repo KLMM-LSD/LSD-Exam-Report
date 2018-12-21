@@ -17,6 +17,7 @@ Redskaberne brugt i udviklings perioden var meget selvvalgt og ud fra hvad vi sy
 
 ## 1. Krav, arkitektur, design og process
 Vi kommer i dette afsnit ind på vores Krav, arkitektur af hele vores system, design af de forskellige komponenter og den process vi har brugt for at lave dette projekt.
+
 ### 1.1. System krav
 Systemet havde følgende minimums krav til funktionalitet:
 
@@ -42,6 +43,7 @@ Rollerne fra Scrum, som product owner, Scrum master, technical lead osv., lå fo
 
 Til et scrum forløb hører der selvfølgelig en product- og sprint backlog. Vores backlog kan findes her og vores individuelle kanban board kan findes her. Vores backlog består af en opdeling af user stories i deres respektive sprint periode. Herunder ses den generelle struktur: 
 - Billede
+
 Det gav i øvrigt mening at udnytte en række af principperne fra XP - der fint komplimenterer Scrum. Dette inkluderer, men begrænser sig ikke til, Pair Programming til de mere udfordrende opgaver. Simpelt design var i fokus, da koden helst skal være overskuelig, selv hvis det set udefra. Testing er vigtigt mht. at garantere en vis kvalitet. Kontinuerlig integration(Travis CI) anvendte vi til at sikre os, at der ikke blev pushet en masse kode op, som skabte en masse uforventede fejl. Koden blev refaktoreret efter behov og vi blev i starten af forløbet enige om en fælles kodningsstandard.
 
 Ud over projekt management anvendte vi også Github som versionsstyring, hvor vi netop kunne lave regelmæssige pushes og oprette branches efter behov mht. teknologiske spikes. Her udgav vi vores ugentlige releases, som led i forløbets afleveringer. Vores samlede projekt bestod af flere github repositories, til henholdsvis udvikling, eksperimentel kode, dokumentation, opsætning mm.
@@ -51,10 +53,12 @@ Softwarearkitekturen i vores projekt består overordnet af en spartansk frontend
 
 Som Cloud-udbyder valgte vi at bruge DigitalOcean. Vi overvejede ikke at bruge en anden cloud service. Vi bestilte en droplet, som kørte hele projektet. Der blev også lavet en droplet til vores overvågningssystemer, Prometheus og Grafana, hvis funktion var at overvåge vores system for mulige fejl. Setuppet endte med at se sådan her ud:
 - billede
+
 Den ene droplet kørte vores Frontend, Backend og Database, hvor den anden droplet kørte vores Prometheus og Grafana server.
 
 Her ses en overordnet arkitektur af systemet og håndtering af data:
 - Billede
+
 Der er fire war filer til de forskellige funktionaliteter. Status svarer enten “Alive”, “Update”, “Down”. Frontend er HTML, CSS og JS. Base tager imod data og Latest giver data i form af JSON.
 
 ### 1.4. Software design
@@ -64,8 +68,10 @@ Da vi fik projektet diskuterede vi og undersøgte hvordan dette projekt kunne im
 Vores frontend blev bygget med JS, HTML og CSS og benytter sig ikke af nogle frameworks og virker på en iPhone 4, som ikke kan ES6. Man kunne også have brugt NodeJS til at servicere frontend men så ville det kræve at tillade Cross-origin resource sharing da det ikke kan dele port med java serveren. Det ville også være ekstra ueffektivt at have to garbage collectede sprog kørende samtidigt på samme maskine. Herunder ses hvordan designet ser ud og hvordan vores frontend fungerer.
 - Billede
 - Billede
+
 Ved at trykke på en post som en bruger har lavet, kan siden hoppe videre til den tråd som posten står i, og hoppe direkte hen til den post hvor end den der.
 - Billede
+
 Her ses en tråd der er loadet. Det meste af tiden der går på at loade en side er konvertering fra Database → JSON og på client side JSON → HTML. Bid mærke i at HTML tags i posts escapes, så folk ikke kan lave alt for sjove ting på siden.
 - Billede
 
@@ -79,6 +85,7 @@ Al data persisteres i en MySQL database. Databasestrukturen er lavet til at vær
 - Billede
 - Billede
 - Billede
+
 Helges simulatordata er så upraktisk lavet at der ikke gemmes et trådid i hver post. Der står kun hvilken post en post er et svar til. Hvis man vil bruge den databasestruktur skal man lave rekursive databaseopslag for at læse en hel tråd. Vi troede at det skulle være realistisk så man havde en service man ville bruge. I sådan et tilfælde er det langsomt at lave rekursive databaseopslag, så vi tilføjede et ekstra trådid-felt som nedarves ved indsættelse af data. Ved indsættelse af en ny tråd er dette felt lig postid, og ellers nedarver man fra parent. Vores gruppe er en af de få grupper der har implementeret at man rent faktisk kan lave opslag på tråde. Desuden er vores frontend til at læse tråde langt mere genialt end det der er på HackerNews. På HackerNews vises kommentarer som træer. Det betyder at når der kommer nye posts er det utroligt besværligt at finde ud af hvilke posts der er nye, for de nye posts kan være hvor som helst på skærmen. I vores design er posts altid sorteret efter postid, og de vises ikke som træer. I stedet er der backlinks til det en post er et svar til.
 
 **Insert-performance**
@@ -111,6 +118,7 @@ Prometheus understøtter også andre features, bl.a. notifikation via email når
 
 Prometheus har indbyggede visualiseringsfunktioner der fungerer, men de er klart rettet mod udviklere og ikke slutbrugere. En af de mest brugte løsninger til at skabe brugervenlige dashboards med monitoreringsvisualiseringer hedder Grafana. Den har indbygget brugerstyring og email alerts, udover en meget kraftig udtræks- og visualiseringsmotor, og dette gør det meget nemt at for os at vedligeholde et Dashboard der skal bruges af slutbrugeren, uden at give dem for meget adgang. Vores dashboard kan ses her:
 - Billede
+
 For at understøtte operatør-gruppen i at holde øje med om systemet lever op til vores Service Level Agreement, har vi valgt fem metrics der er relevante: 
 - PostID for den seneste post vi har modtaget
 - Hvor lang tid det tog Frontend og Databasen at servere den seneste forside-forespørgsel
