@@ -11,7 +11,7 @@ Vi har i vores LSD forløb skulle lave en klon af Hackernews hjemmesiden. Forlø
 Redskaberne brugt i udviklings perioden var meget selvvalgt og ud fra hvad vi syntes var nemmest, hvor i perioden vi skulle vedligeholde den anden gruppes projekt, blev vi introduseret til forskellige 3rd-party redskaber der skulle tages i brug for bedre vedligeholdelse. Alt forklaret mere uddybende i denne rapport.
 
 ## 1. Krav, arkitektur, design og process
-
+### 1.1. System krav
 Systemet havde følgende minimums krav til funktionalitet:
 
 1. Display a set of stories on your system's front page.
@@ -25,11 +25,6 @@ Systemet havde følgende minimums krav til funktionalitet:
 - Accept posted stories/comments/etc.
 - Provide the id of the latest digested post.
 - Provide status information.
-
-
-
-### 1.1. System krav
-
 
 ### 1.2. Udviklings process
 
