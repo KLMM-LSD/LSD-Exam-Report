@@ -89,6 +89,7 @@ Vores backend blev lavet i Java via JavaX.WS.RS og kører på en WildFly server.
 Al data persisteres i en MySQL database. Databasestrukturen er lavet til at være så direkte kompatibel med Helges simulatordata som muligt. Tabellen ratings blev ikke aktuel.
 
 ![DB-billede1](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede1.png)
+
 ![DB-billede2](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede2.png)
 ![DB-billede3](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede3.png)
 ![DB-billede4](https://github.com/KLMM-LSD/LSD-Exam-Report/blob/master/Resources/DB-billede4.png)
